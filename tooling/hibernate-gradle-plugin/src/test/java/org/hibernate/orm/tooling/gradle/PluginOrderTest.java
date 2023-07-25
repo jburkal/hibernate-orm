@@ -9,11 +9,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PluginOrderTest {
 
 	@Test
-	void pluginWorksIfNoJavaPlugin() {
+	void pluginDoesNothingIfNoJavaPlugin() {
 		Project project = ProjectBuilder.builder().build();
 		project.getPlugins().apply( "org.hibernate.orm" );
 
-		assertThat( project.getExtensions().findByName( "hibernate" ) ).isNotNull();
+		assertThat( project.getExtensions().findByName( "hibernate" ) ).isNull();
 	}
 
 	@Test

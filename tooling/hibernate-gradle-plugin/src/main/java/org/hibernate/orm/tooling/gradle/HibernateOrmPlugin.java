@@ -25,24 +25,23 @@ import org.hibernate.orm.tooling.gradle.enhance.EnhancementHelper;
 public class HibernateOrmPlugin implements Plugin<Project> {
 	@Override
 	public void apply(Project project) {
-		// for the 'main' SourceSet and other JVM goodies
-		project.getPlugins().apply( JavaPlugin.class );
+		project.getPluginManager().withPlugin( "java", javaPlugin -> {
+			project.getLogger().debug( "Adding Hibernate extensions to the build [{}]", project.getPath() );
+			final HibernateOrmSpec ormDsl = project.getExtensions().create( HibernateOrmSpec.DSL_NAME,  HibernateOrmSpec.class, project );
 
-		project.getLogger().debug( "Adding Hibernate extensions to the build [{}]", project.getPath() );
-		final HibernateOrmSpec ormDsl = project.getExtensions().create( HibernateOrmSpec.DSL_NAME,  HibernateOrmSpec.class, project );
-
-		prepareEnhancement( ormDsl, project );
-		prepareHbmTransformation( ormDsl, project );
+			prepareEnhancement( ormDsl, project );
+			prepareHbmTransformation( ormDsl, project );
 
 
-		//noinspection ConstantConditions
-		project.getDependencies().add(
-				"implementation",
-				ormDsl.getUseSameVersion().map( (use) -> use
-						? "org.hibernate.orm:hibernate-core:" + HibernateVersion.version
-						: null
-				)
-		);
+			//noinspection ConstantConditions
+			project.getDependencies().add(
+					"implementation",
+					ormDsl.getUseSameVersion().map( (use) -> use
+							? "org.hibernate.orm:hibernate-core:" + HibernateVersion.version
+							: null
+					)
+			);
+		} );
 	}
 
 	private void prepareEnhancement(HibernateOrmSpec ormDsl, Project project) {
