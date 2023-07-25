@@ -14,7 +14,7 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.file.DirectoryProperty;
-import org.gradle.api.plugins.JvmEcosystemPlugin;
+import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.tasks.SourceSet;
 
 import org.hibernate.orm.tooling.gradle.enhance.EnhancementHelper;
@@ -25,8 +25,8 @@ import org.hibernate.orm.tooling.gradle.enhance.EnhancementHelper;
 public class HibernateOrmPlugin implements Plugin<Project> {
 	@Override
 	public void apply(Project project) {
-		// for SourceSet support and other JVM goodies
-		project.getPlugins().apply( JvmEcosystemPlugin.class );
+		// for the 'main' SourceSet and other JVM goodies
+		project.getPlugins().apply( JavaPlugin.class );
 
 		project.getLogger().debug( "Adding Hibernate extensions to the build [{}]", project.getPath() );
 		final HibernateOrmSpec ormDsl = project.getExtensions().create( HibernateOrmSpec.DSL_NAME,  HibernateOrmSpec.class, project );
